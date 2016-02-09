@@ -130,16 +130,21 @@ bool CAgent::GenerateNoGood()
 	std::vector<SAgentV> NoGoodList;
 	if (mAgentView.size() != 0)
 	{
-		for (int i = 0; i < mAgentView.size(); i++)
+		int lLowestPriorityNogood=0;
+		for (int i = mAgentView.size()-1; i >=0&&!lNoGoodFound; i--)
 		{
 			if (!CheckIfAgentConsistent(&mAgentView[i]))
 			{
+				lLowestPriorityNogood = i;
 				lNoGoodFound = true;
-				NoGoodList.push_back(mAgentView[i]);
 			}
 		}
 		if (lNoGoodFound)
 		{
+			for (int i = 0; i <= lLowestPriorityNogood; i++)
+			{
+				NoGoodList.push_back(mAgentView[i]);
+			}
 			mMessengerOut->AddMessage(NoGoodList[NoGoodList.size() - 1].UID, mUID, NoGoodList, NoGood);
 			RemoveFromAgentView(NoGoodList[NoGoodList.size() - 1].UID);
 		}
@@ -165,20 +170,12 @@ bool CAgent::FindNewAssignment()
 		//check new assignment against the nogood list
 		for (int j = 0; j < mNoGoodsList.size() && lViableAssignment; j++)
 		{
-			bool nogoodMatch = true;
-			for (int k = 0; k < mAgentView.size() && nogoodMatch; k++)
+			if (CompareSAgentVVector(mAgentView, mNoGoodsList[j]))
 			{
-				if (mNoGoodsList[j][mNoGoodsList.size() - 1].UID == mAgentView[k].UID)
+				if (i == mNoGoodsList[j][mNoGoodsList[j].size() - 1].Value)
 				{
-					if (mNoGoodsList[j][mNoGoodsList.size() - 1].Value != mAgentView[k].Value)
-					{
-						nogoodMatch = false;
-					}
+					lViableAssignment = false;
 				}
-			}
-			if (nogoodMatch)
-			{
-				lViableAssignment = false;
 			}
 		}
 

@@ -31,15 +31,9 @@ bool CompareSAgentVVector(std::vector<SAgentV> &a, std::vector<SAgentV> &b)
 		lLarge = a;
 	}
 
-	bool lHitFound = false;
-	for (int i = 0; i < lSmall.size()-1; i++)
+	for (int i = 0; i < lSmall.size(); i++)
 	{
-		lHitFound = false;
-		for (int j = 0; j < lLarge.size() && lHitFound == false; j++)
-		{
-			if (CompareSAgentV(lSmall[i], lLarge[j])) lHitFound = true;
-		}
-		if (!lHitFound) return false;
+		if (!CompareSAgentV(lSmall[i], lLarge[i])) return false;
 	}
 	return true;
 }
