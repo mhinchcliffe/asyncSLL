@@ -211,6 +211,9 @@
     <ClCompile Include="Agent.cpp" />
     <ClCompile Include="AgentManager.cpp" />
     <ClCompile Include="IAsyncBTAlg.cpp" />
+    <ClCompile Include="common.cpp">
+      <Filter>Include</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="nQueens.lua">

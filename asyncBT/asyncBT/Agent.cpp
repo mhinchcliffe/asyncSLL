@@ -76,7 +76,7 @@ CAgent::CAgent(int NumAssignments, int UID, CMessenger * messenger, lua_State * 
 	mMessengerOut->AddMessage(mUID, mUID, temp, Ok);
 
 	mLuaState = LuaState;
-	mLuaFileName = mLuaFileName;
+	mLuaFileName = LuaScriptName;
 }
 
 CAgent::~CAgent()
@@ -170,7 +170,7 @@ bool CAgent::FindNewAssignment()
 		//check new assignment against the nogood list
 		for (int j = 0; j < mNoGoodsList.size() && lViableAssignment; j++)
 		{
-			if (CompareSAgentVVector(mAgentView, mNoGoodsList[j]))
+			if (cmnfnc::CompareSAgentVVector(mAgentView, mNoGoodsList[j]))
 			{
 				if (i == mNoGoodsList[j][mNoGoodsList[j].size() - 1].Value)
 				{

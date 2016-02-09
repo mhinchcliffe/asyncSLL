@@ -47,7 +47,8 @@ bool CAgentManager::UpdateMessages()
 		switch (lTempMessege.smType)
 		{
 		case Ok:
-			for (int i = lTempMessege.smUIDFrom; i < mAgentList.size(); i++)
+			//get itter to point at that agents point in the map, the incrament from there, soas to avoid problems with non linear UIDs
+			for (int i = lTempMessege.smUIDFrom+1; i < mAgentList.size(); i++)
 			{
 				mAgentList[i]->ReciveMessage(&lTempMessege);
 			}
