@@ -9,12 +9,12 @@ void CAgent::AddToAgentView(const SAgentV &newView)
 		{
 			if (mAgentView[i].UID == newView.UID)
 			{
-				mAgentView[i].Value == newView.Value;
+				mAgentView[i].Value = newView.Value;
 				FoundInList = true;
 			}
 		}
 	}
-	mAgentView.push_back(newView);
+	else if (!FoundInList)mAgentView.push_back(newView);
 }
 
 void CAgent::RemoveFromAgentView(int agent)
@@ -33,6 +33,7 @@ void CAgent::RemoveFromAgentView(int agent)
 
 bool CAgent::CheckIfAgentConsistent(const SAgentV * agent)
 {
+	/*
 	//load lua
 	luaL_dofile(mLuaState, mLuaFileName);
 	lua_getglobal(mLuaState, mLuaFunctionName);
@@ -57,6 +58,12 @@ bool CAgent::CheckIfAgentConsistent(const SAgentV * agent)
 
 	}
 	return lConsistent;
+	*/
+	if (mAssaignment == agent->Value) return false;
+	int lPriorityDiff = std::abs(mUID - agent->UID);
+	int lValueDiff = std::abs(mAssaignment - agent->Value);
+	if (lPriorityDiff == lValueDiff)return false;
+	return true;
 }
 
 CAgent::CAgent(int NumAssignments, int UID, CMessenger * messenger, lua_State * LuaState, char* LuaScriptName)
@@ -85,41 +92,52 @@ CAgent::~CAgent()
 
 bool CAgent::CheckConsistent()
 {
-	CheckConsistent(mAssaignment);
-	return false;
-}
-
-bool CAgent::CheckConsistent(int i)
-{
-	lua_State* test;
-	test = luaL_newstate();
-	luaL_openlibs(test);
-	luaL_dofile(test, "nQueens.lua");
-	lua_getglobal(test, "gfCheckValid");
-	if (lua_isnil(test, -1))
+	for (int i = 0; i < mAgentView.size(); i++)
 	{
-		std::cout << "Funtion does not exist" << std::endl;
-		lua_pop(test, 1);
-	}
-	else
-	{
-		for (int i = 0; i < mAgentView.size(); i++)
+		if (!CheckIfAgentConsistent(&mAgentView[i]))
 		{
-			std::cout << "Yeah" << std::endl;
-			lua_pushnumber(test, mUID);
-			lua_pushnumber(test, i);
-			lua_pushnumber(test, mAgentView[i].UID);
-			lua_pushnumber(test, mAgentView[i].Value);
-			lua_pcall(test, 6, 1, 0);
-			if (!lua_toboolean(test, -1))
-			{
-				lua_pop(test, 1);
-				return false;
-			}
-			lua_pop(test, 1);
+			return false;
 		}
 	}
 	return true;
+}
+
+bool CAgent::CheckConsistent(int Value)
+{
+	//lua_State* test;
+	//test = luaL_newstate();
+	//luaL_openlibs(test);
+	//luaL_dofile(test, "nQueens.lua");
+	//lua_getglobal(test, "gfCheckValid");
+	//if (lua_isnil(test, -1))
+	//{
+	//	std::cout << "Funtion does not exist" << std::endl;
+	//	lua_pop(test, 1);
+	//}
+	//else
+	//{
+	//	for (int i = 0; i < mAgentView.size(); i++)
+	//	{
+	//		std::cout << "Yeah" << std::endl;
+	//		lua_pushnumber(test, mUID);
+	//		lua_pushnumber(test, i);
+	//		lua_pushnumber(test, mAgentView[i].UID);
+	//		lua_pushnumber(test, mAgentView[i].Value);
+	//		lua_pcall(test, 6, 1, 0);
+	//		if (!lua_toboolean(test, -1))
+	//		{
+	//			lua_pop(test, 1);
+	//			return false;
+	//		}
+	//		lua_pop(test, 1);
+	//	}
+	//}
+	//return true;
+	int lTempAssignStorage = mAssaignment;
+	mAssaignment = Value;
+	bool lConsistent =CheckConsistent();
+	mAssaignment = lTempAssignStorage;
+	return lConsistent;
 }
 
 bool CAgent::GenerateNoGood()
@@ -157,12 +175,13 @@ bool CAgent::FindNewAssignment()
 	//if current assignment is problamatic, check all possible assignemts untill one is found
 	//which is consistent with its agentview/nogoodlist. if no such assignment can be found,
 	//generate a nogood and check again. if a noggod cannot be generated (e.g. the agent list is empty)
-	//then return false to indicate there is no solution
-	bool lViableAssignment;
+	//then return false to indicate there is no solution	
 	if (CheckConsistent())
 	{
 		return true;
 	}
+
+	bool lViableAssignment;
 
 	for (int i = 0; i < mNumPosibleAssignments; i++)
 	{

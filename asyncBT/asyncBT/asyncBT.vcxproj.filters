@@ -102,10 +102,18 @@
     <ClInclude Include="lzio.h">
       <Filter>Lua\lua files</Filter>
     </ClInclude>
-    <ClInclude Include="Messenger.h" />
-    <ClInclude Include="Agent.h" />
-    <ClInclude Include="AgentManager.h" />
-    <ClInclude Include="IAsyncBTAlg.h" />
+    <ClInclude Include="Agent.h">
+      <Filter>SourceFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="AgentManager.h">
+      <Filter>SourceFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="IAsyncBTAlg.h">
+      <Filter>SourceFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Messenger.h">
+      <Filter>SourceFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lapi.c">
@@ -207,12 +215,20 @@
     <ClCompile Include="lzio.c">
       <Filter>Lua\lua files</Filter>
     </ClCompile>
-    <ClCompile Include="Messenger.cpp" />
-    <ClCompile Include="Agent.cpp" />
-    <ClCompile Include="AgentManager.cpp" />
-    <ClCompile Include="IAsyncBTAlg.cpp" />
     <ClCompile Include="common.cpp">
       <Filter>Include</Filter>
+    </ClCompile>
+    <ClCompile Include="Agent.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="AgentManager.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="IAsyncBTAlg.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Messenger.cpp">
+      <Filter>SourceFiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 #include <map>
 #include <iostream>
 #include"lua.hpp"
+#include<cmath>
+#include<math.h>
 struct SAgentV
 {
 	int UID;
